@@ -346,6 +346,26 @@ This project is a RESTful API service for managing books, users, and libraries. 
     ```
     
 
+
+## Postman Collection
+
+To test the API, you can use the Postman collection provided in this repository. Follow the instructions below to download and import it into your Postman client.
+
+### Download Postman Collection
+- [Postman Collection](#) _(https://github.com/Ragul-p/Book-Keeping/blob/main/Book%20Keeping.postman_collection.json)_
+
+### How to Import in Postman
+1. Download the Postman collection from the link above.
+2. Open Postman and click on `Import` in the top left.
+3. Choose the file you downloaded.
+4. You will see all the API endpoints categorized for easy access.
+
+### Checking the API
+Once the Postman collection is imported:
+1. Ensure that the backend server is running (or access the [hosted API URL](https://book-keeping-7gie.onrender.com/)).
+2. Use the provided endpoints to check the API functionalities such as user registration, login, borrowing books, returning books, etc.
+
+
 ## Setup Instructions
 
 ### 1. Clone the Repository
