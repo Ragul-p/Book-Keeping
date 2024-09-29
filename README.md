@@ -75,25 +75,6 @@ This project is a RESTful API service for managing books, users, and libraries. 
 
 
 
-
-
-
-
-///////////////////////////
-
-
-
-
-
-
-
-
-
-
----------------------------
-
-
-
 # Bookkeeping Service
 
 This project is a Bookkeeping Service API that manages books, users (authors and borrowers), and libraries. The service allows users to borrow books, manage library inventories.
@@ -113,6 +94,7 @@ This project is a Bookkeeping Service API that manages books, users (authors and
 - **PostgreSQL**: Database system.
 - **JWT**: For secure authentication and authorization.
 
+
 ## API Endpoints
 
 ### Books
@@ -120,94 +102,100 @@ This project is a Bookkeeping Service API that manages books, users (authors and
 - `GET /api/books` – Retrieve a list of all books
   - **Response**:
     ```json
-{
-    "message": "success",
-    "data": [
+    {
+      "books": [
         {
-            "id": 1,
-            "bookName": "storyBook 1",
-            "imageUrl": "http://imageurl.com/image.jpeg"
-        },
-        {
-            "id": 2,
-            "bookName": "storyBook 2",
-            "imageUrl": "http://imageurl.com/image.jpeg"
-        },
-        {
-            "id": 3,
-            "bookName": "storyBook 3",
-            "imageUrl": "http://imageurl.com/image.jpeg"
+          "id": 1,
+          "title": "Book Title",
+          "author": {
+            "id": 10,
+            "name": "Author Name"
+          },
+          "library": {
+            "id": 100,
+            "name": "Library Name"
+          },
+          "borrower": {
+            "id": 20,
+            "name": "Borrower Name"
+          },
+          "coverImage": "https://firebase.storage.com/coverImage.jpg"
         }
-    ]
-}
+      ]
+    }
     ```
 
 - `GET /api/books/:id` – Retrieve details of a specific book by its ID, including the Library, Author, and Borrower
   - **Response**:
     ```json
-{
-    "message": "success",
-    "data": {
-        "bookData": {
-            "id": 1,
-            "bookName": "storyBook 1",
-            "imageUrl": "http://imageurl.com/image.jpeg"
+    {
+      "book": {
+        "id": 1,
+        "title": "Book Title",
+        "author": {
+          "id": 10,
+          "name": "Author Name"
         },
-        "createdBy": {
-            "id": 1,
-            "name": "ragul",
-            "email": "ragul@gmail.com",
-            "userType": "AUTHOR",
-            "userRole": "ADMIN"
+        "library": {
+          "id": 100,
+          "name": "Library Name"
         },
-        "borrowedBy": null,
-        "librarayDetails": null
+        "borrower": {
+          "id": 20,
+          "name": "Borrower Name"
+        },
+        "coverImage": "https://firebase.storage.com/coverImage.jpg"
+      }
     }
-}
     ```
 
 - `POST /api/books` – Create a new book entry (Role: Author)
   - **Request**:
     ```json
-   {
-    "bookName":"storyBook 1",
-    "imageUrl": "http://imageurl.com/image.jpeg",
-    "createdBy": 1
-}
+    {
+      "title": "New Book",
+      "authorId": 10,
+      "libraryId": 100
+    }
     ```
   - **Response**:
     ```json
-{
-    "message": "success",
-    "description": "successfully book Created"
-}
+    {
+      "message": "Book created successfully",
+      "book": {
+        "id": 2,
+        "title": "New Book",
+        "authorId": 10,
+        "libraryId": 100,
+        "coverImage": "https://firebase.storage.com/newBookCover.jpg"
+      }
+    }
     ```
 
 - `PUT /api/books/:id` – Update details of a specific book by its ID (Role: Author)
   - **Request**:
     ```json
-{
-    "bookName":"storyBook 22",
-    "imageUrl": "http://imageurl.com/image.jpeg"
-}
+    {
+      "title": "Updated Book Title"
+    }
     ```
   - **Response**:
     ```json
-{
-    "message": "success",
-    "data": [
-        1
-    ]
-}
+    {
+      "message": "Book updated successfully",
+      "book": {
+        "id": 2,
+        "title": "Updated Book Title"
+      }
+    }
     ```
 
 - `DELETE /api/books/:id` – Delete a book by its ID (Role: Author)
   - **Response**:
     ```json
-{
-    "message": "success",
-    "data": 1
-}
+    {
+      "message": "Book deleted successfully"
+    }
     ```
 
 ### Users
@@ -215,37 +203,40 @@ This project is a Bookkeeping Service API that manages books, users (authors and
 - `POST /api/users/register` – Register a new user (author/borrower)
   - **Request**:
     ```json
-{
-    "name": "ragul",
-    "email": "ragul@gmail.com",
-    "password": "12345",
-    "userType": "AUTHOR",
-    "userRole": "ADMIN"
-}
+    {
+      "name": "User Name",
+      "email": "user@example.com",
+      "password": "password",
+      "role": "author"
+    }
     ```
   - **Response**:
     ```json
-{
-    "message": "success",
-    "description": "successfully newUser Created"
-}
+    {
+      "message": "User registered successfully",
+      "user": {
+        "id": 30,
+        "name": "User Name",
+        "email": "user@example.com",
+        "role": "author"
+      }
+    }
     ```
 
 - `POST /api/users/login` – Authenticate user and generate JWT token
   - **Request**:
     ```json
-{
-    "email": "ragul@gmail.com",
-    "password": "12345"
-}
+    {
+      "email": "user@example.com",
+      "password": "password"
+    }
     ```
   - **Response**:
     ```json
-{
-    "message": "success",
-    "description": "successfully login",
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOjEsImlhdCI6MTcyNzU5NjI2MH0.Ydem_vaKNceIrONOcNmJ-LJja7VnZ7tHfHhru-6fL4M"
-}
+    {
+      "message": "Login successful",
+      "token": "jwt_token_here"
+    }
     ```
 
 ### Borrowing
@@ -253,25 +244,28 @@ This project is a Bookkeeping Service API that manages books, users (authors and
 - `POST /api/borrow` – Borrow a book (Role: Borrower)
   - **Request**:
     ```json
-{
-    "bookId":2
-}
+    {
+      "bookId": 1,
+      "userId": 20
+    }
     ```
   - **Response**:
     ```json
-{
-    "message": "success",
-    "description": "successfully book borrowed"
-}
+    {
+      "message": "Book borrowed successfully",
+      "borrowedBook": {
+        "bookId": 1,
+        "userId": 20
+      }
+    }
     ```
 
 - `PUT /api/return/:id` – Return a borrowed book by its ID (Role: Borrower)
   - **Response**:
     ```json
-{
-    "message": "success",
-    "description": "successfully return book "
-}
+    {
+      "message": "Book returned successfully"
+    }
     ```
 
 ### Libraries
@@ -279,99 +273,93 @@ This project is a Bookkeeping Service API that manages books, users (authors and
 - `GET /api/libraries` – Retrieve a list of all libraries
   - **Response**:
     ```json
-{
-    "message": "success",
-    "data": [
+    {
+      "libraries": [
         {
-            "id": 3,
-            "bookName": "storyBook 3",
-            "imageUrl": "http://imageurl.com/image.jpeg",
-            "createdBy": 3,
-            "createdAt": "2024-09-29T07:46:44.464Z",
-            "updatedAt": "2024-09-29T07:46:44.464Z",
-            "borrowedBy": null,
-            "libraryId": null
-        },
-        {
-            "id": 2,
-            "bookName": "storyBook 22",
-            "imageUrl": "http://imageurl.com/image.jpeg",
-            "createdBy": 2,
-            "createdAt": "2024-09-29T07:46:37.498Z",
-            "updatedAt": "2024-09-29T07:53:29.346Z",
-            "borrowedBy": null,
-            "libraryId": 2
+          "id": 100,
+          "name": "Library Name",
+          "location": "City",
+          "books": [
+            {
+              "id": 1,
+              "title": "Book Title",
+              "borrower": {
+                "id": 20,
+                "name": "Borrower Name"
+              }
+            }
+          ]
         }
-    ]
-}
+      ]
+    }
     ```
 
 - `GET /api/libraries/:id` – Retrieve details of a specific library, including books and borrower details
   - **Response**:
     ```json
-{
-    "message": "success",
-    "data": {
-        "id": 2,
-        "name": "libraries 2",
-        "createdAt": "2024-09-29T07:52:30.890Z",
-        "updatedAt": "2024-09-29T07:52:30.890Z",
-        "Books": [
-            {
-                "id": 2,
-                "bookName": "storyBook 22",
-                "imageUrl": "http://imageurl.com/image.jpeg",
-                "createdBy": 2,
-                "createdAt": "2024-09-29T07:46:37.498Z",
-                "updatedAt": "2024-09-29T07:53:29.346Z",
-                "borrowedBy": null,
-                "libraryId": 2,
-                "borrowerDetails": null
+    {
+      "library": {
+        "id": 100,
+        "name": "Library Name",
+        "location": "City",
+        "books": [
+          {
+            "id": 1,
+            "title": "Book Title",
+            "borrower": {
+              "id": 20,
+              "name": "Borrower Name"
             }
+          }
         ]
+      }
     }
-}
     ```
 
 - `POST /api/libraries` – Create a new library
   - **Request**:
     ```json
-{
-    "name":"libraries 1"
-}
+    {
+      "name": "New Library",
+      "location": "City"
+    }
     ```
   - **Response**:
     ```json
-{
-    "message": "success",
-    "description": "successfully  Library created"
-}
+    {
+      "message": "Library created successfully",
+      "library": {
+        "id": 101,
+        "name": "New Library",
+        "location": "City"
+      }
+    }
     ```
 
 - `PUT /api/libraries/:id` – Update library details
   - **Request**:
     ```json
-  {
-    "name":"libraries 22"
-}
+    {
+      "name": "Updated Library Name"
+    }
     ```
   - **Response**:
     ```json
-{
-    "message": "success",
-    "data": [
-        1
-    ]
-}
+    {
+      "message": "Library updated successfully",
+      "library": {
+        "id": 100,
+        "name": "Updated Library Name"
+      }
+    }
     ```
 
 - `DELETE /api/libraries/:id` – Delete a library
   - **Response**:
     ```json
-{
-    "message": "success",
-    "data": 1
-}
+    {
+      "message": "Library deleted successfully"
+    }
     ```
 
 ### Library Inventory
@@ -379,49 +367,41 @@ This project is a Bookkeeping Service API that manages books, users (authors and
 - `GET /api/libraries/:id/inventory` – Retrieve a list of available books in a specific library
   - **Response**:
     ```json
-{
-    "message": "success",
-    "data": [
+    {
+      "inventory": [
         {
-            "id": 2,
-            "bookName": "storyBook 22",
-            "imageUrl": "http://imageurl.com/image.jpeg",
-            "createdBy": 2,
-            "createdAt": "2024-09-29T07:46:37.498Z",
-            "updatedAt": "2024-09-29T07:53:29.346Z",
-            "borrowedBy": null,
-            "libraryId": 2
+          "id": 1,
+          "title": "Book Title"
         }
-    ]
-}
+      ]
+    }
     ```
 
 - `POST /api/libraries/:id/inventory` – Add a book to a library's inventory (Role: Librarian)
   - **Request**:
     ```json
- {
-    "bookId": 2
-}
+    {
+      "bookId": 1
+    }
     ```
   - **Response**:
     ```json
- {
-    "message": "success",
-    "description": "successfully add book to Librarie"
-}
+    {
+      "message": "Book added to library inventory",
+      "inventory": {
+        "libraryId": 100,
+        "bookId": 1
+      }
+    }
     ```
 
 - `DELETE /api/libraries/:id/inventory/:bookId` – Remove a book from the inventory by its ID (Role: Librarian)
   - **Response**:
     ```json
-   {
-    "message": "success",
-    "data": [
-        1
-    ]
-}
+    {
+      "message": "Book removed from library inventory"
+    }
     ```
-
     
 
 ## Setup Instructions
